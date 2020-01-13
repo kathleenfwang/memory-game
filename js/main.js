@@ -19,23 +19,33 @@
 	]
 
  let cardsInPlay = []
+ let score = 0 
  
 
  function checkForMatch() {
  if (cardsInPlay[0] === cardsInPlay[1]) {
-  console.log("You found a match!");
+  alert("You found a match!");
+  score+=2 
+  cardsInPlay = [] 
+  
+  document.getElementById('score').textContent = score
   
 } else {
-  console.log("Sorry, try again.");
+  alert("Sorry, try again.");
+  cardsInPlay.pop()
+  score-- 
+  document.getElementById('score').textContent = score
 }
-cardsInPlay = [] 
  
 }
 
 function flipCard() {
-	console.log("User flipped " + cards[this.id].rank)
-	cardsInPlay.push(cards[this.id].rank)
-	this.src = cards[this.id].cardImg
+ 
+	let id = this.getAttribute("data-id")
+	this.setAttribute('src',cards[id].cardImg);
+
+	console.log("User flipped " + cards[id].rank)
+	cardsInPlay.push(cards[id].rank)
 
 	if (cardsInPlay.length == 2) {
  	checkForMatch()
@@ -45,10 +55,16 @@ function flipCard() {
  }
  } 
 
-// need to get length of list elements next time.. 
-for (let i =0;i<4;i++) {
-	document.getElementsByTagName('img')[i].addEventListener('click',flipCard)
-	document.getElementsByTagName('img')[i].setAttribute('id',i)
-}
- 
+ function createBoard() {
+ 	for (let i=0;i<cards.length;i++) {
+ 		let cardElement = document.createElement('img'); 
+ 		cardElement.setAttribute('src','images/back.png');
+ 		cardElement.setAttribute('data-id',i);
+ 		cardElement.addEventListener('click',flipCard)
+ 		document.getElementById('gameboard').appendChild(cardElement)
+ 	}
+ }
+  
+ createBoard()
+
 
